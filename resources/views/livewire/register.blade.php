@@ -9,15 +9,15 @@
                                 <img src="{{asset ('img/logo.png')}}" alt="logo" />
                             </a>
                         </div>
-                        <form>
+                        <form wire:submit.prevent="submit">
                             <div class="mb-6">
-                                <input type="text" placeholder="Name" class="w-full rounded-md border border-[#E9EDF4] py-3 px-5 bg-[#FCFDFE] text-base text-body-color placeholder-[#ACB6BE] outline-none focus-visible:shadow-none focus:border-[#2f56d3] transition"/>
+                                <input type="text" wire:model="name" placeholder="Name" class="w-full rounded-md border border-[#E9EDF4] py-3 px-5 bg-[#FCFDFE] text-base text-body-color placeholder-[#ACB6BE] outline-none focus-visible:shadow-none focus:border-[#2f56d3] transition"/>
                             </div>
                             <div class="mb-6">
-                                <input type="email" placeholder="Email" class="w-full rounded-md border border-[#E9EDF4] py-3 px-5 bg-[#FCFDFE] text-base text-body-color placeholder-[#ACB6BE] outline-none focus-visible:shadow-none focus:border-[#2f56d3] transition"/>
+                                <input type="email" wire:model="email" placeholder="Email" class="w-full rounded-md border border-[#E9EDF4] py-3 px-5 bg-[#FCFDFE] text-base text-body-color placeholder-[#ACB6BE] outline-none focus-visible:shadow-none focus:border-[#2f56d3] transition"/>
                             </div>
                             <div class="mb-6">
-                                <input type="password" placeholder="Password" class="w-full rounded-md border border-[#E9EDF4] py-3 px-5 bg-[#FCFDFE] text-base text-body-color placeholder-[#ACB6BE] outline-none focus-visible:shadow-none focus:border-[#2f56d3] transition"/>
+                                <input type="password" wire:model="password" placeholder="Password" class="w-full rounded-md border border-[#E9EDF4] py-3 px-5 bg-[#FCFDFE] text-base text-body-color placeholder-[#ACB6BE] outline-none focus-visible:shadow-none focus:border-[#2f56d3] transition"/>
                             </div>
                             <div class="mb-10">
                                 <input type="submit" value="Sign Up" class=" w-full rounded-md border border-[#2f56d3] py-3 px-5 bg-[#2f56d3] text-base text-white cursor-pointer hover:shadow-md transition duration-300 ease-in-out bg-[#2f56d3]"/>

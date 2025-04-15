@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <title>{{ $title ?? 'Page Title' }}</title>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @vite( 'resources/css/app.css' )
     @livewireStyles
 </head>
@@ -21,6 +22,25 @@
 
 @livewireScripts
 @vite( 'resources/js/app.js' )
+<script>
+    Livewire.on('swal', (params) => {
+        const alertData = Array.isArray(params) ? params[0] : params;
+        Swal.fire({
+            toast: true,
+            title: alertData.title || '',
+            text: alertData.text || '',
+            icon: alertData.type,
+            position: 'top-right',
+            showConfirmButton: false,
+            timer: 3000,
+            didClose: () => {
+                if (alertData.redirect) {
+                    window.location.href = alertData.redirect;
+                }
+            }
+        });
+    });
+</script>
 </body>
 
 </html>
