@@ -8,9 +8,12 @@ use Illuminate\Auth\Access\Response;
 
 class PostPolicy
 {
+    /**
+     * Grant all permissions to admins before checking specific methods.
+     */
     public function before (User $user, $ability)
     {
-//        return $user->isAdmin ();
+        return $user->isAdmin() ? true : null;
     }
     /**
      * Determine whether the user can view any models.
