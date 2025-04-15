@@ -8,6 +8,10 @@ use Illuminate\Auth\Access\Response;
 
 class PostPolicy
 {
+    public function before (User $user, $ability)
+    {
+//        return $user->isAdmin ();
+    }
     /**
      * Determine whether the user can view any models.
      */
@@ -21,7 +25,7 @@ class PostPolicy
      */
     public function view(User $user, Post $post): bool
     {
-        return true;
+        return $post->user_id === $user->id;
     }
 
     /**
@@ -29,7 +33,7 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +41,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
-        return true;
+        return $user->id === $post->user_id;
     }
 
     /**
