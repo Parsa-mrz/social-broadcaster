@@ -3,12 +3,9 @@
 namespace App\Livewire;
 
 use App\Helpers\SweetAlertHelper;
-use App\Models\User;
 use App\Services\AuthService;
 use Livewire\Attributes\Title;
 use Livewire\Component;
-use function dd;
-use function session;
 
 class Login extends Component
 {
