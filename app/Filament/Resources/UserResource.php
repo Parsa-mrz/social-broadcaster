@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
-use App\Models\Post;
+use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,63 +14,47 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
-class PostResource extends Resource
+class UserResource extends Resource
 {
-    protected static ?string $model = Post::class;
-    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+    protected static ?string $model = User::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-user';
 
     public static function getNavigationBadge(): ?string
     {
-        $user = Auth::user();
-
-        if ($user->isCustomer()) {
-            return $user->posts()->count();
-        }
-
         return static::getModel()::count();
     }
-
-    public static function getEloquentQuery(): Builder
-    {
-        $user = Auth::user();
-
-        if ($user->isCustomer()) {
-            return parent::getEloquentQuery()->where('user_id', $user->id);
-        }
-
-        return parent::getEloquentQuery();
-    }
-
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('password')
+                    ->password()
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('role')
                     ->required()
                     ->maxLength(255)
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('content')
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\FileUpload::make('image')
-                    ->image()
-                    ->directory(fn ($record) => "posts/" . auth()->id())
-                    ->preserveFilenames()
-                    ->disk('public')
-                    ->columnSpanFull(),
+                    ->default('customer'),
             ]);
     }
 
     public static function table(Table $table): Table
     {
-        $user = Auth::user();
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')
-                    ->numeric()
-                    ->sortable()
-                    ->hidden (fn() => $user->isCustomer() ),
-                Tables\Columns\TextColumn::make('title')
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('role')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -104,9 +88,9 @@ class PostResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPosts::route('/'),
-            'create' => Pages\CreatePost::route('/create'),
-            'edit' => Pages\EditPost::route('/{record}/edit'),
+            'index' => Pages\ListUsers::route('/'),
+            'create' => Pages\CreateUser::route('/create'),
+            'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
 }

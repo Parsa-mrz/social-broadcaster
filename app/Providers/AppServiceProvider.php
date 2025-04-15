@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Post;
+use App\Models\User;
 use App\Policies\PostPolicy;
+use App\Policies\UserPolicy;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Gate;
@@ -25,5 +27,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::policy(Post::class, PostPolicy::class);
+        Gate::policy (User::class, UserPolicy::class);
     }
 }
