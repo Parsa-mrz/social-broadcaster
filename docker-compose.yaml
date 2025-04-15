@@ -1,0 +1,64 @@
+volumes:
+  postgresData_local: {}
+  redisData_local: {}
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: social_broadcaster
+    container_name: social-app
+    ports:
+      - "80:8000"
+    env_file:
+      - .env
+    volumes:
+      - .:/var/www/html
+      - ./storage/logs:/var/www/html/storage/logs
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: postgres:16
+    container_name: social-db
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: socialbroadcaster
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresData_local:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7
+    container_name: social-redis
+    env_file:
+      - .env
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisData_local:/var/lib/redis/data
+    networks:
+      - app-network
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: social-mailpit
+    ports:
+      - "8026:8025"
+      - "1026:1025"
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
