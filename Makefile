@@ -3,6 +3,8 @@ fresh:
 	USER_ID=$$(id -u) docker compose exec app php artisan migrate:fresh --seed
 up:
 	USER_ID=$$(id -u) docker compose up -d
+build:
+	USER_ID=$$(id -u) docker compose up -d --build
 down:
 	USER_ID=$$(id -u) docker compose down
 restart:
