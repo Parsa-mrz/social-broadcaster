@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Models\Post;
 use App\Models\User;
 use App\Policies\PostPolicy;
+use App\Policies\SocialAccountPolicy;
+use App\Policies\SubscriptionPlanPolicy;
 use App\Policies\UserPolicy;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\UserRepository;
@@ -28,5 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::policy(Post::class, PostPolicy::class);
         Gate::policy (User::class, UserPolicy::class);
+        Gate::policy (SubscriptionPlanPolicy::class, SubscriptionPlanPolicy::class);
+        Gate::policy (SocialAccountPolicy::class, SocialAccountPolicy::class);
     }
 }
