@@ -10,10 +10,8 @@ class EditSocialAccount extends EditRecord
 {
     protected static string $resource = SocialAccountResource::class;
 
-    protected function getHeaderActions(): array
+    protected function getRedirectUrl(): string
     {
-        return [
-            Actions\DeleteAction::make(),
-        ];
+        return static::getResource()::getUrl('index');
     }
 }

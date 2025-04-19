@@ -22,6 +22,15 @@ class SocialAccountResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return Auth::user()->socialAccounts()->count();
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('user_id', auth()->id());
+    }
     public static function form(Form $form): Form
     {
         return $form
@@ -32,8 +41,8 @@ class SocialAccountResource extends Resource
                         'telegram' => 'Telegram',
                         'wordpress' => 'WordPress',
                     ])
-                    ->searchable ()
-                    ->native (false)
+                    ->disabled ()
+                    ->dehydrated (true)
                     ->required()
                     ->columnSpanFull (),
                 Forms\Components\Repeater::make('settings')
@@ -56,7 +65,10 @@ class SocialAccountResource extends Resource
                             }),
                     ])->columns (2)
                     ->required()
-                    ->columnSpanFull (),
+                    ->columnSpanFull ()
+                ->addable (false)
+                ->deletable (false)
+                ->reorderable (false),
             ]);
     }
 
@@ -64,19 +76,7 @@ class SocialAccountResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('platform')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -86,7 +86,7 @@ class SocialAccountResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+
                 ]),
             ]);
     }
