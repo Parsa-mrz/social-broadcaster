@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             UserSeeder::class,
             PostSeeder::class,
+            CurrencySeeder::class,
+            SubscriptionPlanSeeder::class,
         ]);
     }
 }
