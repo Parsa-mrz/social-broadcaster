@@ -7,6 +7,6 @@ use App\Models\SubscriptionPlan;
 class SubscriptionPlanRepository
 {
     public function all(){
-        return SubscriptionPlan::with('currency')->get();
+        return SubscriptionPlan::with('currency')->orderBy ('id')->get();
     }
 }

@@ -12,6 +12,11 @@ class PricingTable extends Component
     {
         $this->plans = $subscriptionPlanRepository->all();
     }
+    public function selectPlan($plan)
+    {
+        $this->dispatch('planSelected', $plan);
+    }
+
     public function render()
     {
         return view('livewire.pricing-table');

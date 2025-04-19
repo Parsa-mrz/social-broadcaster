@@ -36,8 +36,8 @@
 
                         <div>
                             <a
-                                @if($plan->is_active) href="#" @endif
-                                class="filament-button inline-flex items-center justify-center px-10 py-3 text-base font-medium text-white bg-primary-600 rounded-lg hover:bg-gradient-to-r hover:from-primary-600 hover:to-primary-800 transition focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                wire:click="selectPlan({{ $plan }})"
+                                class="filament-button inline-flex items-center justify-center px-8 py-3 text-base font-medium text-white bg-primary-600 rounded-lg hover:bg-gradient-to-r hover:from-primary-600 hover:to-primary-800 transition focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 cursor-pointer"
                                aria-label="Purchase {{ $plan['name'] ?? 'plan' }}"
                                @if(!$plan->is_active) disabled @endif>
                                 @if(!$plan->is_active)
