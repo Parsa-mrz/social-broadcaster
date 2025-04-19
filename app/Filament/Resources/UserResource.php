@@ -9,10 +9,12 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
@@ -37,12 +39,14 @@ class UserResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('password')
                     ->password()
-                    ->required()
-                    ->maxLength(255),
+                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                    ->dehydrated(fn ($state) => filled($state)),
                 Forms\Components\TextInput::make('role')
                     ->required()
                     ->maxLength(255)
                     ->default('customer'),
+                Forms\Components\Toggle::make('is_active')
+                ->label ('Status'),
             ]);
     }
 
@@ -56,6 +60,9 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('role')
                     ->searchable(),
+                Tables\Columns\IconColumn::make ('is_active')
+                ->boolean ()
+                ->label ('Status'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
