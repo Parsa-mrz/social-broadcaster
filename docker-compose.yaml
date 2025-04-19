@@ -7,7 +7,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: social_broadcaster
+    image: social_broadcaster:latest
     container_name: social-app
     ports:
       - "80:8000"
