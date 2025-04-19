@@ -26,34 +26,34 @@ class SocialAccount extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function setSettingsAttribute($settings)
-    {
-        $encrypted = collect($settings)->map(function ($item) {
-            return [
-                'key' => $item['key'],
-                'value' => Crypt::encryptString($item['value']),
-            ];
-        });
-
-        $this->attributes['settings'] = json_encode($encrypted);
-    }
-
-    public function getSettingsAttribute($settings)
-    {
-        $decoded = json_decode($settings, true);
-
-        if (!is_array($decoded)) return [];
-
-        return collect($decoded)->map(function ($item) {
-            return [
-                'key' => $item['key'],
-                'value' => $this->canDecrypt() ? Crypt::decryptString($item['value']) : '******',
-            ];
-        })->toArray();
-    }
-
-    protected function canDecrypt(): bool
-    {
-        return auth()->check() && Gate::allows('decrypt', $this);
-    }
+//    public function setSettingsAttribute($settings)
+//    {
+//        $encrypted = collect($settings)->map(function ($item) {
+//            return [
+//                'key' => $item['key'],
+//                'value' => Crypt::encryptString($item['value']),
+//            ];
+//        });
+//
+//        $this->attributes['settings'] = json_encode($encrypted);
+//    }
+//
+//    public function getSettingsAttribute($settings)
+//    {
+//        $decoded = json_decode($settings, true);
+//
+//        if (!is_array($decoded)) return [];
+//
+//        return collect($decoded)->map(function ($item) {
+//            return [
+//                'key' => $item['key'] ?? '',
+//                'value' => $this->canDecrypt() ? Crypt::decryptString($item['value']) : '******',
+//            ];
+//        })->toArray();
+//    }
+//
+//    protected function canDecrypt(): bool
+//    {
+//        return auth()->check() && Gate::allows('decrypt', $this);
+//    }
 }

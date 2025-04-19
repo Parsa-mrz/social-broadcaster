@@ -17,17 +17,17 @@ class AuthService
     public function authenticate(string $email, string $password){
         $user = $this->userRepository->findByEmail($email);
 
-        if(!$user->is_active){
-            return [
-                'status' => false,
-                'message' => 'Your account is deactivated, please contact administrator'
-            ];
-        }
-
         if(!$user){
             return [
                 'status' => false,
                 'message' => 'Email or password is not correct'
+            ];
+        }
+
+        if(!$user->is_active){
+            return [
+                'status' => false,
+                'message' => 'Your account is deactivated, please contact administrator'
             ];
         }
 

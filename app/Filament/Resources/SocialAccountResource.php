@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\SocialAccountResource\Pages;
 use App\Filament\Resources\SocialAccountResource\RelationManagers;
 use App\Models\SocialAccount;
+use App\Policies\SocialAccountPolicy;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class SocialAccountResource extends Resource
@@ -38,6 +40,8 @@ class SocialAccountResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('key')
                         ->label('Key')
+                        ->disabled ()
+                        ->dehydrated(true)
                         ->required(),
                         Forms\Components\TextInput::make('value')
                         ->label('Value')
