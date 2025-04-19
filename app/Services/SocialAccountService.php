@@ -25,17 +25,29 @@ class SocialAccountService
      */
     public function createSocialAccountsForUser(int $userId): void
     {
-        try {
-            // Create Instagram SocialAccount
-            $this->socialAccountRepository->createSocialAccount($userId, SocialAccountEnum::Instagram->value, [
+        $socialAccounts = $this->getSocialAccountsData($userId);
+
+        foreach ($socialAccounts as $platform => $settings) {
+            $this->createSocialAccount($userId, $platform, $settings);
+        }
+    }
+
+    /**
+     * Prepare the data for social accounts creation.
+     *
+     * @param int $userId
+     * @return array
+     */
+    private function getSocialAccountsData(int $userId): array
+    {
+        return [
+            SocialAccountEnum::Instagram->value => [
                 [
                     'key' => SocialAccountEnum::AccessToken->value,
                     'value' => ''
                 ]
-            ]);
-
-            // Create Telegram SocialAccount
-            $this->socialAccountRepository->createSocialAccount($userId, SocialAccountEnum::Telegram->value, [
+            ],
+            SocialAccountEnum::Telegram->value => [
                 [
                     'key' => SocialAccountEnum::Bot_Token->value,
                     'value' => ''
@@ -44,25 +56,38 @@ class SocialAccountService
                     'key' => SocialAccountEnum::ChatId->value,
                     'value' => ''
                 ],
-            ]);
+            ],
+            SocialAccountEnum::WordPress->value => [
+                [
+                    'key' => SocialAccountEnum::SiteUrl->value,
+                    'value' => ''
+                ],
+                [
+                    'key' => SocialAccountEnum::Username->value,
+                    'value' => ''
+                ],
+                [
+                    'key' => SocialAccountEnum::Password->value,
+                    'value' => ''
+                ],
+            ],
+        ];
+    }
 
-            // Create WordPress SocialAccount
-            $this->socialAccountRepository->createSocialAccount($userId, SocialAccountEnum::WordPress->value, [
-                [
-                  'key' => SocialAccountEnum::SiteUrl->value,
-                  'value' => ''
-                ],
-                [
-                  'key' => SocialAccountEnum::Username->value,
-                  'value' => ''
-                ],
-                [
-                  'key' => SocialAccountEnum::Password->value,
-                  'value' => ''
-                ],
-            ]);
+    /**
+     * Create a social account for the user.
+     *
+     * @param int $userId
+     * @param string $platform
+     * @param array $settings
+     * @return void
+     */
+    private function createSocialAccount(int $userId, string $platform, array $settings): void
+    {
+        try {
+            $this->socialAccountRepository->createSocialAccount($userId, $platform, $settings);
         } catch (\Exception $e) {
-            Log::error('Error creating social accounts for user: ' . $userId, ['exception' => $e]);
+            Log::error("Error creating social account for user {$userId} on platform {$platform}", ['exception' => $e]);
         }
     }
 }
