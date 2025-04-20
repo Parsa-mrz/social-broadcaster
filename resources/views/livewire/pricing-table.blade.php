@@ -35,17 +35,13 @@
                         </div>
 
                         <div>
-                            <a
-                                wire:click="selectPlan({{ $plan }})"
-                                class="filament-button inline-flex items-center justify-center px-8 py-3 text-base font-medium text-white bg-primary-600 rounded-lg hover:bg-gradient-to-r hover:from-primary-600 hover:to-primary-800 transition focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 cursor-pointer"
-                               aria-label="Purchase {{ $plan['name'] ?? 'plan' }}"
-                               @if(!$plan->is_active) disabled @endif>
+                            <x-filament::button wire:click="selectPlan({{ $plan }})">
                                 @if(!$plan->is_active)
                                     Plan is not available
                                 @else
                                     Purchase Now
                                 @endif
-                            </a>
+                            </x-filament::button>
                         </div>
                     </div>
                 @endforeach

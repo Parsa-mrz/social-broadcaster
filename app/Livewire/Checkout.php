@@ -21,7 +21,7 @@ class Checkout extends Component
 
     public function subscribe ()
     {
-        dd('subscribed');
+        //implement payment
     }
 
     public function render()

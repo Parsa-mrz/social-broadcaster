@@ -1,4 +1,4 @@
-<div class="subscription-checkout">
+<div class="subscription-checkout" xmlns:x-filament="http://www.w3.org/1999/html">
     <section id="checkout" class="py-12 lg:py-24 bg-[#1a191c] min-h-screen text-center">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-2xl mx-auto text-center mb-12 lg:mb-16">
@@ -44,19 +44,12 @@
                 <form>
                     @csrf
                     <div class="flex flex-col gap-4 justify-center">
-                        <button
-                            wire:click="subscribe"
-                            class="filament-button mt-3 inline-flex items-center justify-center px-10 py-3 text-base font-medium text-white bg-primary-600 rounded-lg hover:bg-gradient-to-r hover:from-primary-600 hover:to-primary-800 transition focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-                        >
+                        <x-filament::button wire:click="subscribe">
                             Confirm Purchase
-                        </button>
-                        <button
-                            type="button"
-                            wire:click="cancel"
-                            class="filament-button inline-flex items-center justify-center px-10 py-3 text-base font-medium text-white bg-primary-600 rounded-lg hover:bg-gradient-to-r hover:from-primary-600 hover:to-primary-800 transition focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-                        >
+                        </x-filament::button>
+                        <x-filament::button wire:click="cancel">
                             ← Go back to pricing
-                        </button>
+                        </x-filament::button>
                     </div>
                 </form>
             </div>
