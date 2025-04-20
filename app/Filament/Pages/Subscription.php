@@ -13,4 +13,9 @@ class Subscription extends Page
     {
         return '';
     }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
 }
