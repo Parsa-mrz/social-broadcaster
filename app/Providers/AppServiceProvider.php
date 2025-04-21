@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Post;
 use App\Models\User;
 use App\Observers\UserObserver;
+use App\Policies\PaymentPolicy;
 use App\Policies\PostPolicy;
 use App\Policies\SocialAccountPolicy;
 use App\Policies\SubscriptionPlanPolicy;
@@ -44,5 +45,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy (User::class, UserPolicy::class);
         Gate::policy (SubscriptionPlanPolicy::class, SubscriptionPlanPolicy::class);
         Gate::policy (SocialAccountPolicy::class, SocialAccountPolicy::class);
+        Gate::policy (PaymentPolicy::class, PaymentPolicy::class);
     }
 }

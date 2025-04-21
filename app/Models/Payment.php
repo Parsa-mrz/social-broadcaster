@@ -18,7 +18,7 @@ class Payment extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function paymentMethod(): BelongsTo
+    public function paymentGateway(): BelongsTo
     {
         return $this->belongsTo(PaymentGateway::class);
     }
