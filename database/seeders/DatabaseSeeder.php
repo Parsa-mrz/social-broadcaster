@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             PostSeeder::class,
             CurrencySeeder::class,
             SubscriptionPlanSeeder::class,
-            PaymentMethodSeeder::class,
+            PaymentGatewaySeeder::class,
         ]);
     }
 }

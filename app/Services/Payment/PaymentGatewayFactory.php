@@ -2,6 +2,8 @@
 
 namespace App\Services\Payment;
 
+use App\Enums\PaymentGatewayEnum;
+
 class PaymentGatewayFactory
 {
     /**
@@ -13,13 +15,13 @@ class PaymentGatewayFactory
      *
      * @throws \Exception If the payment gateway is unsupported.
      */
-    public static function make(string $gateway): PaymentGatewayInterface
+    public function make(string $gateway): PaymentGatewayInterface
     {
         return match ($gateway) {
-            'stripe' => new StripeGateway(),
-            'paypal' => new PaypalGateway(),
-            'cod'    => new CodGateway(),
-            default => throw new \Exception("Unsupported payment gateway: $gateway"),
+            PaymentGatewayEnum::STRIPE->value => new StripeGateway(),
+            PaymentGatewayEnum::PAYPAL->value => new PaypalGateway(),
+            PaymentGatewayEnum::COD->value    => new CodGateway(),
+            default => throw new \Exception("Unsupported Payment Gateway: $gateway"),
         };
     }
 }

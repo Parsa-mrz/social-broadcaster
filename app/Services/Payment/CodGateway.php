@@ -4,7 +4,7 @@ namespace App\Services\Payment;
 
 use function uniqid;
 
-class CodGateway
+class CodGateway implements PaymentGatewayInterface
 {
     /**
      * @var bool The status of the transaction.

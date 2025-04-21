@@ -11,7 +11,7 @@ interface PaymentGatewayInterface
      *
      * @return mixed The result of the charge operation, could be a transaction object, success flag, etc.
      */
-    public function charge(array $data): mixed;
+    public function charge(array $data):mixed;
 
     /**
      * Retrieves the transaction reference for the most recent transaction.

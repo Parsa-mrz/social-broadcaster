@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PaymentMethodResource\Pages;
 use App\Filament\Resources\PaymentMethodResource\RelationManagers;
-use App\Models\PaymentMethod;
+use App\Models\PaymentGateway;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PaymentMethodResource extends Resource
 {
-    protected static ?string $model = PaymentMethod::class;
+    protected static ?string $model = PaymentGateway::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

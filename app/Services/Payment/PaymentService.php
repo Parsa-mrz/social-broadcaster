@@ -2,35 +2,71 @@
 
 namespace App\Services\Payment;
 
+use App\Enums\PaymentStatusEnum;
+use App\Models\Payment;
+use App\Models\PaymentGateway;
+use App\Repositories\PaymentRepository;
+
 class PaymentService
 {
-    /**
-     * Process a payment using the specified payment method and amount.
-     *
-     * @param string $paymentMethod The identifier of the payment method (e.g., 'paypal', 'stripe', etc.)
-     * @param float $amount The amount to be charged.
-     * @return mixed The result of the payment process (usually an object implementing a gateway-specific response).
-     */
-    public function charge($paymentMethod, $amount,$currency)
+    public function __construct (protected PaymentGatewayFactory $paymentGatewayFactory, protected PaymentRepository $paymentRepository)
     {
-        $gateway = PaymentGatewayFactory::make($paymentMethod);
 
-        $paymentResult = $gateway->charge([
-            'amount' => $amount,
-            'currency' => $currency->name,
-        ]);
-
-        return $paymentResult;
     }
 
     /**
-     * Determine if the payment was successful.
+     * Processes a payment using the specified gateway.
      *
-     * @param mixed $paymentResult The result object returned from the payment gateway's charge method.
-     * @return bool True if the payment succeeded, false otherwise.
+     * @param string $gateway The payment gateway to use (e.g., 'stripe', 'paypal', 'cod').
+     * @param array $data Payment data (e.g., amount, currency, card details).
+     *
+     * @return array Transaction details including reference and status.
+     *
+     * @throws \Exception If the payment gateway is unsupported or payment fails.
      */
-    public function isPaymentSuccessful($paymentResult)
+    public function processPayment(string $gateway, array $data) : array|Payment
     {
-        return $paymentResult->isSuccessful();
+        $gatewayRecord = PaymentGateway::where('name', $gateway)
+                                                   ->where('status', true)
+                                                   ->first();
+
+        if(!$gatewayRecord) {
+            return [
+                'status' => false,
+                'message' => 'Payment gateway is deactivated'
+            ];
+        }
+
+        // Create the payment gateway instance
+        $paymentGateway = $this->paymentGatewayFactory->make($gateway);
+
+        // Process the charge
+        $paymentGateway->charge($data);
+
+        $payment = $this->paymentRepository->createPayment ([
+            'user_id' => auth()->id(),
+            'payment_gateway_id' => $gatewayRecord->id,
+            'total' => $data['total'],
+        ]);
+
+        // Check if the transaction was successful
+        if (!$paymentGateway->isSuccessful()) {
+            $payment->update(['status' => PaymentStatusEnum::FAILED->value]);
+            return [
+                'status' => false,
+                'message' => 'Payment was not successful'
+            ];
+        }
+
+
+        $payment->update ([
+            'status' => PaymentStatusEnum::SUCCESS->value,
+            'transaction_reference' => $paymentGateway->getTransactionReference(),
+        ]);
+
+        return [
+            'status' => true,
+            'message' => 'Payment was successful'
+        ];
     }
 }

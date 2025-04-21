@@ -2,11 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\PaymentMethod;
+use App\Enums\PaymentGatewayEnum;
+use App\Models\PaymentGateway;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PaymentMethodSeeder extends Seeder
+class PaymentGatewaySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,23 +16,25 @@ class PaymentMethodSeeder extends Seeder
     {
         $paymentMethods = [
             [
-                'name' => 'COD',
+                'name' => PaymentGatewayEnum::COD->value,
                 'status' => 1,
             ],
             [
-                'name' => 'Paypal',
+                'name' => PaymentGatewayEnum::STRIPE->value,
                 'status' => 1,
             ],
             [
-                'name' => 'Stripe',
+                'name' => PaymentGatewayEnum::PAYPAL->value,
                 'status' => 1,
             ],
         ];
 
         foreach ($paymentMethods as $method) {
-            PaymentMethod::updateOrCreate(
+            PaymentGateway::updateOrCreate(
                 ['name' => $method['name']],
-                ['status' => $method['status']]
+                ['status' => $method['status']],
+                ['created_at' => now()],
+                ['updated_at' => now()]
             );
         }
     }

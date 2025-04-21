@@ -41,17 +41,27 @@
                     </ul>
                 </div>
 
-                <form>
-                    @csrf
-                    <div class="flex flex-col gap-4 justify-center">
+
+                <div class="flex flex-col gap-4 justify-center">
+                    <x-filament::input.wrapper>
+                        <x-filament::input.select
+                            wire:model="paymentMethod"
+                            placeholder="Select a status"
+                        >
+                            <option value="">Select Payment Gateway</option>
+                            <option value="paypal">PayPal</option>
+                            <option value="stripe">Stripe</option>
+                            <option value="cod">COD</option>
+                        </x-filament::input.select>
+                    </x-filament::input.wrapper>
+
                         <x-filament::button wire:click="subscribe">
                             Confirm Purchase
                         </x-filament::button>
                         <x-filament::button wire:click="cancel">
                             ← Go back to pricing
                         </x-filament::button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </section>
