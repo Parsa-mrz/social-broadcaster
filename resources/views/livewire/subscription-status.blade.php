@@ -13,9 +13,10 @@
             </x-filament::dropdown.list.item>
             <x-filament::dropdown.list.item disabled>
                 <ul>
-                    @foreach($plan->subscriptionUsages as $usage)
+                    @foreach($usageStats as $usage)
                         <li>
-                            <strong>{{ucfirst ($usage->platform)}} : </strong>{{$usage->limit}} post remain
+                            <strong>{{ ucfirst($usage['platform']) }}: </strong>
+                            {{ $usage['used'] }} / {{ $usage['limit'] }} Posts
                         </li>
                     @endforeach
                 </ul>
@@ -28,6 +29,4 @@
             Purchase Subscription
         </a>
     </x-filament::button>
-
-
 @endif

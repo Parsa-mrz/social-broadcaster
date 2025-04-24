@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use function app;
 use function auth;
-use function dd;
 
 class PostPlatformResource extends Resource
 {
