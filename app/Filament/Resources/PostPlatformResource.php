@@ -5,20 +5,46 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PostPlatformResource\Pages;
 use App\Filament\Resources\PostPlatformResource\RelationManagers;
 use App\Models\PostPlatform;
+use App\Policies\PostPlatformPolicy;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use function app;
+use function auth;
+use function dd;
 
 class PostPlatformResource extends Resource
 {
     protected static ?string $model = PostPlatform::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public static function getNavigationBadge(): ?string
+    {
+        $user = Auth::user();
+
+        if ($user->isCustomer()) {
+            $posts = $user->posts()->with('postPlatforms')->get();
+
+            $count = $posts->sum(function ($post) {
+                return $post->postPlatforms->count();
+            });
+
+            return $count;
+        }
+
+        return static::getModel()::count();
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return app(PostPlatformPolicy::class)
+            ->scopeVisible(parent::getEloquentQuery(), auth()->user());
+    }
 
     public static function form(Form $form): Form
     {

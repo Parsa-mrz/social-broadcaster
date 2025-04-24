@@ -71,7 +71,7 @@ class PaymentResource extends Resource
                     ->sortable()
                     ->visible (fn () => auth()->user()->isAdmin()),
                 Tables\Columns\TextColumn::make('paymentGateway.name')
-                    ->numeric()
+                    ->label ('Payment Gateway')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge ()
@@ -86,13 +86,9 @@ class PaymentResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label ('Payment Date')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
             ->filters([
                 //

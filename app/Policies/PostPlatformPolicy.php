@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\PostPlatform;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Database\Eloquent\Builder;
 
 class PostPlatformPolicy
 {
@@ -70,5 +71,16 @@ class PostPlatformPolicy
     public function forceDelete(User $user, PostPlatform $postPlatform): bool
     {
         return false;
+    }
+
+    public function scopeVisible(Builder $query, User $user): Builder
+    {
+        if($user->isAdmin()){
+            return $query;
+        }
+
+        return $query->whereHas('post', function (Builder $q) use ($user) {
+            $q->where('user_id', $user->id);
+        });
     }
 }
