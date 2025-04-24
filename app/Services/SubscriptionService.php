@@ -3,13 +3,22 @@
 namespace App\Services;
 
 use App\Models\Subscription;
+use App\Models\SubscriptionUsage;
 use App\Repositories\SubscriptionRepository;
+use App\Repositories\SubscriptionUsageRepository;
+use function dd;
 
 class SubscriptionService
 {
 
-    public function __construct(protected subscriptionRepository $subscriptionRepository)
+    protected $activeSubscription;
+    public function __construct(
+        protected subscriptionRepository $subscriptionRepository ,
+        protected SubscriptionUsageRepository $subscriptionUsageRepository
+    )
     {
+        $this->activeSubscription = $this->subscriptionRepository->findActiveSubscriptionByUserId (auth()->id());
+
     }
 
     public function subscribe (array $data)
@@ -47,5 +56,23 @@ class SubscriptionService
         }
 
         return $stats;
+    }
+
+    public function updateSubscriptionUsage (array $data)
+    {
+        return $this->subscriptionUsageRepository->updateUsage(
+            $this->activeSubscription->id,
+            $data['platform'],
+        );
+    }
+
+    public function hasRemainingUsage (string $platform)
+    {
+        $usage = $this->subscriptionUsageRepository->findUsageBySubscriptionAndPlatform(
+            $this->activeSubscription->id,
+            $platform
+        );
+
+        return $usage && ($usage->limit === 0 || $usage->used < $usage->limit);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Gate;
 
@@ -55,5 +56,10 @@ class SocialAccount extends Model
     protected function canDecrypt(): bool
     {
         return auth()->check() && Gate::allows('decrypt', $this);
+    }
+
+    public function postPlatforms (): HasMany
+    {
+         return $this->hasMany(PostPlatform::class);
     }
 }
