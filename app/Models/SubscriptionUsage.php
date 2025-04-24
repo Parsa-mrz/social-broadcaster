@@ -14,7 +14,8 @@ class SubscriptionUsage extends Model
     protected $fillable = [
         'subscription_id',
         'platform',
-        'limit'
+        'limit',
+        'used',
     ];
 
     public function subscription (): BelongsTo

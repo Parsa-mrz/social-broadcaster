@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Subscription;
 use App\Repositories\SubscriptionRepository;
 
 class SubscriptionService
@@ -13,7 +14,38 @@ class SubscriptionService
 
     public function subscribe (array $data)
     {
-        //todo: check no active subscription has
         $this->subscriptionRepository->createSubscription ($data);
+    }
+
+    public function generateUsageStats(Subscription $subscription)
+    {
+        $stats = [];
+
+        foreach ($subscription->subscriptionUsages ?? [] as $usage) {
+            $platform = ucfirst($usage->platform);
+            $used = $usage->used;
+            $limit = $usage->limit;
+
+            if ($limit == 0) {
+                $limitDisplay = '∞';
+                $remaining = '∞';
+                $color = 'success';
+            } else {
+                $limitDisplay = $limit;
+                $remaining = max(0, $limit - $used);
+                $percentageUsed = ($used / $limit) * 100;
+                $color = $percentageUsed >= 90 ? 'danger' : ($percentageUsed >= 70 ? 'warning' : 'success');
+            }
+
+            $stats[] = [
+                'platform' => $platform,
+                'used' => $used,
+                'limit' => $limitDisplay,
+                'remaining' => $remaining,
+                'color' => $color,
+            ];
+        }
+
+        return $stats;
     }
 }

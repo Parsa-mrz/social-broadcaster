@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId ('subscription_id')->constrained()->onDelete('cascade');
             $table->string ('platform');
             $table->integer ('limit');
+            $table->integer ('used')->default(0);
             $table->timestamps();
         });
     }

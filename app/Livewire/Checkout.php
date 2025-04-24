@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use function auth;
+use function dd;
 
 class Checkout extends Component
 {
@@ -47,7 +48,9 @@ class Checkout extends Component
                 'user_id' => auth()->id(),
                 'payment_id' => $payment->id,
                 'subscription_plan_id' => $this->selectedPlan['id'],
-                'end_at' => now()->addMonth (),
+                'end_at' => $this->selectedPlan['interval'] === 'yearly'
+                    ? now()->addYear()
+                    : now()->addMonth(),
             ]);
             $this->redirect(route('filament.admin.pages.dashboard'));
         }
