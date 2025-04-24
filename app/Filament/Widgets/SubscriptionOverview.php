@@ -9,8 +9,6 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\Auth;
 use function app;
-use function dd;
-use function ucfirst;
 
 class SubscriptionOverview extends BaseWidget
 {

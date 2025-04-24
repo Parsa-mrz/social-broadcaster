@@ -77,6 +77,7 @@ class SocialAccountResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('platform')
+                    ->formatStateUsing(fn(string $state) => ucfirst($state)),
             ])
             ->filters([
                 //
