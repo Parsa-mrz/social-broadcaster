@@ -61,9 +61,7 @@ class AdminPanelProvider extends PanelProvider
             ->authGuard ('web')
             ->renderHook(
                 'panels::user-menu.before',
-                fn (): string => view('livewire.subscription-status', [
-                    'subscribed' => false
-                ])->render()
+                fn (): string => \Livewire\Livewire::mount('subscription-status')
             );
     }
 }

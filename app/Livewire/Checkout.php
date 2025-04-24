@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Services\Payment\PaymentService;
+use App\Services\SubscriptionService;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
@@ -24,7 +25,7 @@ class Checkout extends Component
         $this->dispatch('planSelected', null);
     }
 
-    public function subscribe (PaymentService $paymentService)
+    public function subscribe (PaymentService $paymentService, SubscriptionService $subscriptionService)
     {
         $result = $paymentService->processPayment ($this->paymentMethod,[
             'user' => auth()->user(),
@@ -32,7 +33,6 @@ class Checkout extends Component
             'paymentMethod' => $this->paymentMethod,
             'total' =>$this->selectedPlan['price']
         ]);
-
         $notification = Notification::make()
                                     ->title($result['status'] ? 'Payment Successful' : 'Payment Failed')
                                     ->body($result['message']);
@@ -41,6 +41,16 @@ class Checkout extends Component
 
         $notification->send();
 
+        if ($result['status']) {
+            $payment = $result['payment'];
+            $subscriptionService->subscribe ([
+                'user_id' => auth()->id(),
+                'payment_id' => $payment->id,
+                'subscription_plan_id' => $this->selectedPlan['id'],
+                'end_at' => now()->addMonth (),
+            ]);
+            $this->redirect(route('filament.admin.pages.dashboard'));
+        }
     }
 
     public function render()

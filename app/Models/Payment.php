@@ -22,4 +22,8 @@ class Payment extends Model
     {
         return $this->belongsTo(PaymentGateway::class);
     }
+    public function  subscription (): BelongsTo
+    {
+        return $this->belongsTo(Subscription::class);
+    }
 }

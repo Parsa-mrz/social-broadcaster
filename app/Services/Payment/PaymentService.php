@@ -66,7 +66,8 @@ class PaymentService
 
         return [
             'status' => true,
-            'message' => 'Payment was successful'
+            'message' => 'Payment was successful',
+            'payment' => $payment
         ];
     }
 }

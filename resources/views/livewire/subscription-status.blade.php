@@ -1,10 +1,27 @@
-@if($subscribed)
-    <h1>You are subscribed</h1>
+@php use Carbon\Carbon; @endphp
+@if ($subscribedPlan)
+    <x-filament::dropdown class="w-56">
+        <x-slot name="trigger">
+            <x-filament::button color="primary" class="w-56 justify-between">
+                Active plan : {{ $subscribedPlan->subscriptionPlan->name }}
+            </x-filament::button>
+        </x-slot>
+
+        <x-filament::dropdown.list class="w-56">
+            <x-filament::dropdown.list.item disabled>
+                <strong>Start:</strong> {{ Carbon::parse ($subscribedPlan->start_at)->format ('Y-m-d') }}
+            </x-filament::dropdown.list.item>
+
+            <x-filament::dropdown.list.item disabled>
+                <strong>End:</strong> {{ Carbon::parse ($subscribedPlan->end_at)->format ('Y-m-d') }}
+            </x-filament::dropdown.list.item>
+        </x-filament::dropdown.list>
+    </x-filament::dropdown>
 @else
-    <div class="mr-2">
-        <a href="{{ route('filament.admin.pages.subscription') }}" class="filament-button inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700">
-            <x-heroicon-o-bolt class="w-5 h-5 mr-2" />
+        <x-filament::link
+            :href="route('filament.admin.pages.subscription')"
+            icon="heroicon-m-sparkles"
+        >
             Purchase Subscription
-        </a>
-    </div>
+        </x-filament::link>
 @endif

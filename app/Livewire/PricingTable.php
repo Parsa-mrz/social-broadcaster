@@ -3,7 +3,9 @@
 namespace App\Livewire;
 
 use App\Repositories\SubscriptionPlanRepository;
+use Filament\Notifications\Notification;
 use Livewire\Component;
+use function auth;
 
 class PricingTable extends Component
 {
@@ -14,6 +16,13 @@ class PricingTable extends Component
     }
     public function selectPlan($plan)
     {
+        if(auth ()->user ()->hasActiveSubscription()){
+            Notification::make()
+                        ->title('You have already have an active subscription')
+                        ->danger()
+                        ->send();
+            return;
+        }
         $this->dispatch('planSelected', $plan);
     }
 
