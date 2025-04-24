@@ -14,7 +14,9 @@ class SubscriptionStatus extends Component
     public function mount(SubscriptionRepository $subscriptionRepository,SubscriptionService $subscriptionService)
     {
         $this->plan = $subscriptionRepository->findActiveSubscriptionByUserId (auth()->id ());
-        $this->usageStats = $subscriptionService->generateUsageStats ($this->plan);
+        if($this->plan){
+            $this->usageStats = $subscriptionService->generateUsageStats ($this->plan);
+        }
     }
     public function render()
     {
