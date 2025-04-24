@@ -20,14 +20,14 @@ class SubscriptionOverview extends BaseWidget
         $stats = [];
 
         if (!$subscription) {
-            $stats[] = Stat::make('Subscription', 'No Active Plan')
-                           ->description('Click below to purchase now')
+            $stats[] = Stat::make('Subscription', 'No Active Subscription')
+                           ->description('Click here to purchase now')
                            ->color('danger')
                            ->extraAttributes([
                                'onclick' => "window.location.href='/dashboard/subscription'",
                                'style' => 'cursor: pointer; text-align: center;',
                            ])
-                           ->value('No Active Plan');
+                           ->value('No Active Subscription');
         } else {
             $stats[] = Stat::make('Plan', $subscription->subscriptionPlan->name)
                            ->description('Active until ' . Carbon::parse($subscription->end_at)->format('Y-m-d'))

@@ -2,7 +2,7 @@
 @if ($plan)
     <x-filament::dropdown class="w-56">
         <x-slot name="trigger">
-            <x-filament::button color="primary" class="w-56 justify-between">
+            <x-filament::button color="success" class="w-56 justify-between">
                 Active plan : {{ $plan->subscriptionPlan->name }}
             </x-filament::button>
         </x-slot>
@@ -23,10 +23,11 @@
         </x-filament::dropdown.list>
     </x-filament::dropdown>
 @else
-        <x-filament::link
-            :href="route('filament.admin.pages.subscription')"
-            icon="heroicon-m-sparkles"
-        >
+    <x-filament::button color="warning" class="w-56 justify-between">
+        <a href="{{route('filament.admin.pages.subscription')}}">
             Purchase Subscription
-        </x-filament::link>
+        </a>
+    </x-filament::button>
+
+
 @endif
