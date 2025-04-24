@@ -13,7 +13,7 @@ class SubscriptionRepository
 
     public function findActiveSubscriptionByUserId (int $userId): ?Subscription
     {
-        return Subscription::with('subscriptionPlan')->where([
+        return Subscription::with(['subscriptionPlan','subscriptionUsages'])->where([
             'user_id' => $userId,
             'status' => true
         ])->first();

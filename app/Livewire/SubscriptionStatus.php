@@ -7,11 +7,11 @@ use Livewire\Component;
 
 class SubscriptionStatus extends Component
 {
-    public $subscribedPlan;
+    public $plan;
 
     public function mount(SubscriptionRepository $subscriptionRepository)
     {
-        $this->subscribedPlan = $subscriptionRepository->findActiveSubscriptionByUserId (auth()->id ());
+        $this->plan = $subscriptionRepository->findActiveSubscriptionByUserId (auth()->id ());
     }
     public function render()
     {

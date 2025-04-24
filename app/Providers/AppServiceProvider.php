@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Post;
+use App\Models\Subscription;
 use App\Models\User;
+use App\Observers\SubscriptionObserver;
 use App\Observers\UserObserver;
 use App\Policies\PaymentPolicy;
 use App\Policies\PostPolicy;
@@ -41,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         User::observe(UserObserver::class);
+        Subscription::observe(SubscriptionObserver::class);
         Gate::policy(Post::class, PostPolicy::class);
         Gate::policy (User::class, UserPolicy::class);
         Gate::policy (SubscriptionPlanPolicy::class, SubscriptionPlanPolicy::class);
