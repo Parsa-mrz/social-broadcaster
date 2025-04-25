@@ -65,9 +65,20 @@ Users can securely connect their social media accounts, purchase subscription pl
 ![Admin Dashboard](Images/img_1.png)
 
 ### 🧑‍💼 User Dashboard
-![User Dashboard](Images/video.mov)
-
+🎥 [Watch Demo Video](https://github.com/user-attachments/assets/5ecbb64b-5ad7-4d87-863f-ee9694030142)
 ---
+
+### 🛠️ Installation
+
+```bash
+# 1. Clone the repo
+git clone git@github.com:Parsa-mrz/social-broadcaster.git
+cd social-broadcaster
+
+#2. Run docker
+make up
+
+```
 
 
 ## 💬 Contributing
