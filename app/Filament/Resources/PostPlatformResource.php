@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\PostPlatformStatusEnum;
 use App\Filament\Resources\PostPlatformResource\Pages;
 use App\Filament\Resources\PostPlatformResource\RelationManagers;
 use App\Models\PostPlatform;
@@ -72,11 +73,8 @@ class PostPlatformResource extends Resource
                 Forms\Components\DateTimePicker::make('scheduled_at') -> columnSpanFull (),
                 Forms\Components\DateTimePicker::make('published_at')
                 ->disabled (),
-                Forms\Components\TextInput::make('status')
-                    ->disabled (),
                 Forms\Components\Textarea::make('responses')
-                ->disabled ()
-                ->columnSpanFull (),
+                ->disabled (),
             ]);
     }
 
@@ -96,7 +94,15 @@ class PostPlatformResource extends Resource
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
-                    ->searchable(),
+                                         ->searchable()
+                                         ->badge()
+                                         ->formatStateUsing(fn (string $state): string => ucfirst($state))
+                                         ->color(fn (string $state): string => match ($state) {
+                                             PostPlatformStatusEnum::SCHEDULED->value => 'warning',
+                                             PostPlatformStatusEnum::PUBLISHED->value => 'success',
+                                             PostPlatformStatusEnum::FAILED->value => 'danger',
+                                             default => 'gray',
+                                         }),
             ])
             ->filters([
                 //
@@ -106,7 +112,7 @@ class PostPlatformResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+
                 ]),
             ]);
     }
