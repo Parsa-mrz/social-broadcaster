@@ -21,6 +21,14 @@ class PostResource extends Resource
     protected static ?string $model = Post::class;
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        if(Auth::check () && Auth::user ()->isAdmin()){
+            return true;
+        }
+        return Auth::check () && Auth::user()->hasActiveSubscription();
+    }
+
     public static function getNavigationBadge(): ?string
     {
         $user = Auth::user();

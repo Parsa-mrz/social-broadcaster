@@ -22,6 +22,14 @@ class SocialAccountResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        if(Auth::check () && Auth::user ()->isAdmin()){
+            return true;
+        }
+        return Auth::check () && Auth::user()->hasActiveSubscription();
+    }
+
     public static function getNavigationBadge(): ?string
     {
         return Auth::user()->socialAccounts()->count();

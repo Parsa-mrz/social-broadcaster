@@ -23,6 +23,14 @@ class PostPlatformResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        if(Auth::check () && Auth::user ()->isAdmin()){
+            return true;
+        }
+        return Auth::check () && Auth::user()->hasActiveSubscription();
+    }
+
     public static function getNavigationBadge(): ?string
     {
         $user = Auth::user();
@@ -72,6 +80,7 @@ class PostPlatformResource extends Resource
                                        ->required(),
                 Forms\Components\DateTimePicker::make('scheduled_at') -> columnSpanFull (),
                 Forms\Components\DateTimePicker::make('published_at')
+                    ->hidden (fn () => Auth::user()->isCustomer())
                 ->disabled (),
                 Forms\Components\Select::make('status')
                 ->label('Status')
@@ -81,10 +90,12 @@ class PostPlatformResource extends Resource
                     PostPlatformStatusEnum::SCHEDULED->value => __('Scheduled'),
                     PostPlatformStatusEnum::FAILED->value => __('Failed'),
                 ])
+                ->hidden (fn () => Auth::user()->isCustomer())
                 ->native (false),
                 Forms\Components\Textarea::make('responses')
                 ->disabled ()
                 ->columnSpanFull ()
+                ->hidden (fn () => Auth::user()->isCustomer())
                 ->rows (6),
             ]);
     }
