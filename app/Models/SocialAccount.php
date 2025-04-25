@@ -62,4 +62,16 @@ class SocialAccount extends Model
     {
          return $this->hasMany(PostPlatform::class);
     }
+
+
+    public function getDecryptedSettings(): array
+    {
+        $decoded = json_decode($this->attributes['settings'], true);
+
+        if (!is_array($decoded)) return [];
+
+        return collect($decoded)->mapWithKeys(function ($item) {
+            return [$item['key'] => Crypt::decryptString($item['value'])];
+        })->toArray();
+    }
 }

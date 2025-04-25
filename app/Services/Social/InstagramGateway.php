@@ -2,12 +2,12 @@
 
 namespace App\Services\Social;
 
+use App\Models\Post;
+use App\Models\SocialAccount;
 class InstagramGateway implements SocialGatewayInterface
 {
-    public function publish(string $title, string $content, string $imagePath,array $credentials): bool
+    public function publish(Post $post,SocialAccount $socialAccount): bool
     {
-        // Use Instagram API logic here
-        logger("Posting to Instagram: $title");
         return true;
     }
 }

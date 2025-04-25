@@ -73,8 +73,19 @@ class PostPlatformResource extends Resource
                 Forms\Components\DateTimePicker::make('scheduled_at') -> columnSpanFull (),
                 Forms\Components\DateTimePicker::make('published_at')
                 ->disabled (),
+                Forms\Components\Select::make('status')
+                ->label('Status')
+                ->default (PostPlatformStatusEnum::SCHEDULED->value)
+                ->options([
+                    PostPlatformStatusEnum::PUBLISHED->value => __('Published'),
+                    PostPlatformStatusEnum::SCHEDULED->value => __('Scheduled'),
+                    PostPlatformStatusEnum::FAILED->value => __('Failed'),
+                ])
+                ->native (false),
                 Forms\Components\Textarea::make('responses')
-                ->disabled (),
+                ->disabled ()
+                ->columnSpanFull ()
+                ->rows (6),
             ]);
     }
 

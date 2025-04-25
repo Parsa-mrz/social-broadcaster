@@ -2,7 +2,10 @@
 
 namespace App\Services\Social;
 
+use App\Models\Post;
+use App\Models\SocialAccount;
+
 interface SocialGatewayInterface
 {
-    public function publish(string $title, string $content, string $imagePath, array $credentials): bool;
+    public function publish(Post $post, SocialAccount $socialAccount): bool;
 }

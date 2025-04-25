@@ -19,5 +19,7 @@ php artisan storage:link
 # Start the queue worker in the background
 php artisan queue:work --daemon --tries=3 --sleep=3 &
 
+php artisan schedule:run &
+
 # Start PHP server server in the background
 exec php artisan serve --host=0.0.0.0 --port=8000

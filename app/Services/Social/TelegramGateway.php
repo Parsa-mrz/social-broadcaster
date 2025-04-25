@@ -2,12 +2,14 @@
 
 namespace App\Services\Social;
 
+use App\Models\Post;
+use App\Models\SocialAccount;
+
 class TelegramGateway implements SocialGatewayInterface
 {
-    public function publish(string $title, string $content, string $imagePath,array $credentials): bool
+    public function publish(Post $post,SocialAccount $socialAccount): bool
     {
-        // Use Telegram Bot API logic here
-        logger("Posting to Telegram: $title");
+
         return true;
     }
 }

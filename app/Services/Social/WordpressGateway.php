@@ -2,21 +2,36 @@
 
 namespace App\Services\Social;
 
+use App\Models\Post;
+use App\Models\SocialAccount;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class WordpressGateway implements SocialGatewayInterface
 {
-    public function publish(string $title, string $content, string $imagePath,array $credentials): bool
+    public function publish(Post $post,SocialAccount $socialAccount): bool
     {
-        $imageUrl = asset('storage/' . $imagePath);
+        $settings = $socialAccount->getDecryptedSettings();
 
-        $response = Http::withBasicAuth($credentials['username'], $credentials['password'])
-                        ->post("{$credentials['site_url']}/posts", [
-                            'title'   => $title,
-                            'content' => "<img src=\"$imageUrl\" /><p>$content</p>",
-                            'status'  => 'publish'
-                        ]);
+        $endpoint = $settings['site_url'] . '/wp-json/wp/v2/posts';
 
-        return $response->successful();
+        $postData = [
+            'title'   => $post->title,
+            'content' => $post->content,
+            'status'  => 'publish',
+        ];
+
+        if ($post->image) {
+            $postData['content'] .= "<br><img src='{$post->image}' />";
+        }
+
+        $response = Http::withBasicAuth($settings['username'], $settings['password'])
+                        ->post($endpoint, $postData);
+
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            throw new \Exception("Failed to post to WordPress. Status: " . $response->status() . '. Response: ' . $response->body());
+        }
     }
 }
